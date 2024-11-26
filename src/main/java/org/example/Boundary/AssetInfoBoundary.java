@@ -1,13 +1,13 @@
 package org.example.Boundary;
 
 import org.example.Control.MainControl;
-import org.example.Entity.AssetDto;
+import org.example.Entity.AssetDetail;
 import org.example.Entity.AssetType;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class AssetBoundary extends JFrame {
+public class AssetInfoBoundary extends JFrame {
 
     private final JPanel searchPanel = new JPanel();
     private final JLabel assetTypeLabel = new JLabel("자산 종류:");
@@ -19,7 +19,7 @@ public class AssetBoundary extends JFrame {
 
     private final MainControl mainControl;
 
-    public AssetBoundary(MainControl mainControl) {
+    public AssetInfoBoundary(MainControl mainControl) {
         this.mainControl = mainControl;
 
         initUI();
@@ -50,8 +50,8 @@ public class AssetBoundary extends JFrame {
         assetDtoTextArea.setEditable(false); // 수정 불가
         assetDtoTextArea.setLineWrap(true); // 자동 줄바꿈
         assetDtoTextArea.setWrapStyleWord(true); // 단어 단위 줄바꿈
-        JScrollPane scrollPane = new JScrollPane(assetDtoTextArea); // 스크롤 추가
 
+        JScrollPane scrollPane = new JScrollPane(assetDtoTextArea); // 스크롤 추가
         add(scrollPane, BorderLayout.CENTER); // 스크롤 패널을 중앙에 추가
     }
 
@@ -65,12 +65,12 @@ public class AssetBoundary extends JFrame {
             return;
         }
 
-        AssetDto assetDto = mainControl.searchAsset(assetType, symbol);
-        if (assetDto != null) {
-            assetDtoTextArea.setText(assetDto.toString());
-        } else {
+        AssetDetail assetDetail = mainControl.searchAsset(assetType, symbol);
+        if (assetDetail == null) {
             assetDtoTextArea.setText("검색된 자산 정보가 없습니다.");
+            return;
         }
+        assetDtoTextArea.setText(assetDetail.toString());
 
         // UI 갱신
         revalidate();

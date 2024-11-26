@@ -1,6 +1,6 @@
 package org.example.Entity;
 
-public class AssetDto {
+public class AssetDetail {
 
     private String symbol;       // 종목 코드
     private String date;         // 날짜
@@ -13,11 +13,11 @@ public class AssetDto {
     private double change;       // 변동 폭
     private double changePercent;// 변동률
 
-    public AssetDto() {
+    public AssetDetail() {
     }
 
-    public AssetDto(String symbol, String date, double open, double high, double low,
-                    double close, double adjClose, long volume, double change, double changePercent) {
+    public AssetDetail(String symbol, String date, double open, double high, double low,
+                       double close, double adjClose, long volume, double change, double changePercent) {
         this.symbol = symbol;
         this.date = date;
         this.open = open;
@@ -115,13 +115,13 @@ public class AssetDto {
         return "종목 정보\n" +
                 "  종목 코드 :  " + symbol + "\n" +
                 "  기준 날짜 :  " + date + "\n" +
-                "  시    가 :    " + open + " USD\n" +
-                "  고    가 :    " + high + " USD\n" +
-                "  저    가 :    " + low + " USD\n" +
-                "  종    가 :    " + close + " USD\n" +
-                "  조정 종가 :  " + adjClose + " USD\n" +
+                "  시    가 :    " + open + "\n" +
+                "  고    가 :    " + high + "\n" +
+                "  저    가 :    " + low + "\n" +
+                "  종    가 :    " + close + "\n" +
+                "  조정 종가 :  " + adjClose + "\n" +
                 "  거 래 량 :    " + volume + " 주\n" +
-                "  변 동 폭 :    " + change + " USD\n" +
+                "  변 동 폭 :    " + change + "\n" +
                 "  변 동 률 :    " + changePercent + " %\n";
     }
 }

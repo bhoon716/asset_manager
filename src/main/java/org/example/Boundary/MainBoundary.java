@@ -14,7 +14,7 @@ public class MainBoundary extends JFrame {
     private final JPanel newsPanel = new JPanel(new GridLayout(5, 1, 10, 10)); // 뉴스 버튼 레이아웃
     private final JLabel newsLabel = new JLabel("오늘의 경제 이슈 - " + LocalDate.now(), SwingConstants.CENTER); // 가운데 정렬
     private final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // 버튼 패널
-    private final JButton assetButton = new JButton("검색하기");
+    private final JButton assetButton = new JButton("자산 검색");
     private final JButton portfolioButton = new JButton("포트폴리오 관리");
     private final JButton logoutButton = new JButton("로그아웃");
 
@@ -69,8 +69,8 @@ public class MainBoundary extends JFrame {
 
     // 버튼 패널 설정
     private void showButtonPanel() {
-        assetButton.addActionListener(e -> mainControl.showAssetBoundary());
-        portfolioButton.addActionListener(e -> mainControl.showPortfolioBoundary());
+        assetButton.addActionListener(e -> mainControl.showAssetInfoBoundary());
+        portfolioButton.addActionListener(e -> mainControl.showPortfolioListBoundary());
         logoutButton.addActionListener(e -> mainControl.logout());
 
         // 버튼 스타일링
