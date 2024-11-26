@@ -1,9 +1,6 @@
 package org.example.Control;
 
-import org.example.ApplicationLogic.AssetApiService;
-import org.example.ApplicationLogic.AssetFactory;
-import org.example.ApplicationLogic.NewsApiService;
-import org.example.ApplicationLogic.PortfolioService;
+import org.example.ApplicationLogic.*;
 import org.example.Boundary.AssetInfoBoundary;
 import org.example.Boundary.MainBoundary;
 import org.example.Boundary.PortfolioBoundary;
@@ -16,9 +13,9 @@ public class MainControl {
 
     private final AssetFactory assetFactory;
     private final NewsApiService newsApiService;
-    private final PortfolioService portfolioService;
+    private final PortfolioServiceImpl portfolioService;
 
-    public MainControl(AssetFactory assetFactory, NewsApiService newsApiService, PortfolioService portfolioService){
+    public MainControl(AssetFactory assetFactory, NewsApiService newsApiService, PortfolioServiceImpl portfolioService){
         this.assetFactory = assetFactory;
         this.newsApiService = newsApiService;
         this.portfolioService = portfolioService;
