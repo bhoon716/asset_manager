@@ -28,6 +28,7 @@ public class PortfolioListBoundary extends JFrame {
     private void initUI(){
         setTitle("포트폴리오 리스트");
         setSize(600, 400);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         addPortfolioButton.addActionListener(e -> addPortfolio());

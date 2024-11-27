@@ -30,6 +30,7 @@ public class AssetInfoBoundary extends JFrame {
     private void initUI() {
         setTitle("자산 정보 검색");
         setSize(500, 400);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setVisible(true);
     }
