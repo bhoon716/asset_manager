@@ -12,6 +12,7 @@ public interface PortfolioService {
 
     boolean checkDuplicate(String name);
 
+    void setPortfolioList(List<Portfolio> portfolioList);
     void addPortfolio(String name);
 
     void deletePortfolio(Portfolio portfolio);

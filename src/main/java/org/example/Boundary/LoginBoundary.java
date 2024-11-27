@@ -62,7 +62,8 @@ public class LoginBoundary extends JFrame {
             try {
                 if (mainControl.login(id, pw)) {
                     JOptionPane.showMessageDialog(this, "로그인 성공!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    mainControl.showMainBoundary(); // 로그인 성공 후 메인 화면으로 이동
+                    mainControl.setPortfolioList();
+                    mainControl.showMainBoundary(mainControl.getUser()); // 로그인 성공 후 메인 화면으로 이동
                     dispose(); // 현재 창 닫기
                 } else {
                     JOptionPane.showMessageDialog(this, "로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);

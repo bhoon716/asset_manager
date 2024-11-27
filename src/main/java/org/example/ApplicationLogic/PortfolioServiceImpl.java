@@ -4,12 +4,13 @@ import org.example.Entity.Asset;
 import org.example.Entity.AssetType;
 import org.example.Entity.Portfolio;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PortfolioServiceImpl implements PortfolioService {
 
-    private final List<Portfolio> portfolioList = new ArrayList<>();
+    private List<Portfolio> portfolioList;
     private Portfolio currentPortfolio;
 
     @Override
@@ -26,6 +27,9 @@ public class PortfolioServiceImpl implements PortfolioService {
         }
         return false;
     }
+
+    @Override
+    public void setPortfolioList(List<Portfolio> portfolioList) {this.portfolioList = portfolioList; }
 
     @Override
     public void addPortfolio(String name) {
