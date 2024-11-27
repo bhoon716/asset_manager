@@ -3,53 +3,51 @@ package org.example.ApplicationLogic;
 import org.example.Entity.Portfolio;
 import org.example.Entity.User;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserServiceImpl implements UserService {
 
-    private final List<User> userList = new ArrayList<>();
+    private final Map<String, User> userMap = new HashMap<>();
     private User currentUser;
 
     @Override
-    public List<User> getUserList() {
-        return this.userList;
+    public Map<String, User> getUserMap() {
+        return this.userMap;
     }
 
     @Override
     public boolean checkDuplicate(String id) {
-        for(User user : userList){
-            if(id.equals(user.getId())){
-                return true;
-            }
-        }
-        return false;
+        return userMap.containsKey(id);
     }
 
     @Override
     public void addUser(String id, String password) {
-        userList.add(new User(id, password));
+        userMap.put(id, new User(id, password));
     }
     @Override
     public User getCurrentUser() {
         return currentUser;
     }
     @Override
+    public String getUserId() {return currentUser.getId();}
+    @Override
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
-    @Override
-    public void addPortfolio(Portfolio newPortfolio) {
-        currentUser.getPortfolioList().add(newPortfolio);
-    }
+
 
     @Override
+    public List<Portfolio> getPortfolioListDataList() {
+        return currentUser.getPortfolioList();
+    }
+    @Override
     public boolean login(String id, String password) {
-        for (User user : userList) {
-            if (id.equals(user.getId()) && password.equals(user.getPassword())) {
-                this.currentUser = user; // 로그인 성공 시 현재 사용자 설정
-                return true;
-            }
+        User user = userMap.get(id); // Map에서 사용자 검색
+        if (user != null && user.getPassword().equals(password)) {
+            this.currentUser = user; // 로그인 성공 시 현재 사용자 설정
+            return true;
         }
         return false; // 로그인 실패
     }

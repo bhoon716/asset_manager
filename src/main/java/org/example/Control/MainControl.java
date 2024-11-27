@@ -5,6 +5,7 @@ import org.example.Boundary.*;
 import org.example.Entity.*;
 
 import java.util.List;
+import java.util.Map;
 
 public class MainControl {
 
@@ -20,7 +21,8 @@ public class MainControl {
         this.userService = userService;
     }
 
-    public void showMainBoundary(){
+    public void showMainBoundary(User user){
+        userService.setCurrentUser(user);
         new MainBoundary(this);
     }
 
@@ -30,7 +32,12 @@ public class MainControl {
 
     public void showPortfolioListBoundary() {
         new PortfolioListBoundary(this);
-    }public void showLoginBoundary() {
+    }
+    public void showPortfolioBoundary(Portfolio portfolio) {
+        portfolioService.setCurrentPortfolio(portfolio);
+        new PortfolioBoundary(this);
+    }
+    public void showLoginBoundary() {
         new LoginBoundary(this);
     }
     public void showRegisterBoundary() {
@@ -52,6 +59,9 @@ public class MainControl {
     public List<Portfolio> getPortfolioList() {
         return portfolioService.getPortfolioList();
     }
+    public List<Portfolio> getPortfolioListDataList() {
+        return userService.getPortfolioListDataList();
+    }
 
     public boolean checkDuplicatedPortfolioName(String name) {
         return portfolioService.checkDuplicate(name);
@@ -60,11 +70,10 @@ public class MainControl {
     public void addPortfolio(String name) {
         portfolioService.addPortfolio(name);
     }
-
-    public void showPortfolioBoundary(Portfolio portfolio) {
-        portfolioService.setCurrentPortfolio(portfolio);
-        new PortfolioBoundary(this);
+    public void setPortfolioList() {
+        portfolioService.setPortfolioList(userService.getPortfolioListDataList());
     }
+
 
     public void deletePortfolio(Portfolio portfolio) {
         portfolioService.deletePortfolio(portfolio);
@@ -119,14 +128,15 @@ public class MainControl {
     public User getUser() {
         return userService.getCurrentUser();
     }
+    public String getUserId() {return userService.getUserId();}
     public void addUser(String id, String password) {
         userService.addUser(id, password);
     }
     public boolean checkDuplicatedUserId(String id) {
         return userService.checkDuplicate(id);
     }
-    public List<User> getUserList() {
-        return userService.getUserList();
+    public Map<String,User> getUserMap() {
+        return userService.getUserMap();
     }
     public boolean login(String id, String password) {
         return userService.login(id, password);

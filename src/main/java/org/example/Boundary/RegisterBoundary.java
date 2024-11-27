@@ -69,7 +69,7 @@ public class RegisterBoundary extends JFrame {
 
     private void updateUserList() {
         DefaultListModel<User> listModel = new DefaultListModel<>();
-        for (User user : mainControl.getUserList()) {
+        for (User user : mainControl.getUserMap().values()) { // Map의 values()로 User 객체 접근
             listModel.addElement(user);
         }
         userList.setModel(listModel);
