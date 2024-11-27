@@ -33,6 +33,7 @@ public class MainBoundary extends JFrame {
         setTitle("포트폴리오 매니저");
         setSize(700, 500); // 크기를 조금 더 키움
         setLayout(new BorderLayout(10, 10)); // 간격 추가
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // 뉴스 제목 스타일링

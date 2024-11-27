@@ -1,10 +1,7 @@
 package org.example.Control;
 
 import org.example.ApplicationLogic.*;
-import org.example.Boundary.AssetInfoBoundary;
-import org.example.Boundary.MainBoundary;
-import org.example.Boundary.PortfolioBoundary;
-import org.example.Boundary.PortfolioListBoundary;
+import org.example.Boundary.*;
 import org.example.Entity.*;
 
 import java.util.List;
@@ -14,11 +11,13 @@ public class MainControl {
     private final AssetFactory assetFactory;
     private final NewsApiService newsApiService;
     private final PortfolioServiceImpl portfolioService;
+    private final UserServiceImpl userService;
 
-    public MainControl(AssetFactory assetFactory, NewsApiService newsApiService, PortfolioServiceImpl portfolioService){
+    public MainControl(AssetFactory assetFactory, NewsApiService newsApiService, PortfolioServiceImpl portfolioService, UserServiceImpl userService){
         this.assetFactory = assetFactory;
         this.newsApiService = newsApiService;
         this.portfolioService = portfolioService;
+        this.userService = userService;
     }
 
     public void showMainBoundary(){
@@ -31,7 +30,14 @@ public class MainControl {
 
     public void showPortfolioListBoundary() {
         new PortfolioListBoundary(this);
+    }public void showLoginBoundary() {
+        new LoginBoundary(this);
     }
+    public void showRegisterBoundary() {
+        new RegisterBoundary(this);
+    }
+
+
 
     public AssetDetail searchAsset(AssetType type, String symbol) {
         AssetApiService apiService = assetFactory.getApiService(type);
@@ -42,9 +48,6 @@ public class MainControl {
         return newsApiService.getNewsList(page, size);
     }
 
-    public void logout() {
-        System.out.println("logout");
-    }
 
     public List<Portfolio> getPortfolioList() {
         return portfolioService.getPortfolioList();
@@ -112,4 +115,26 @@ public class MainControl {
             }
         }
     }
+
+    public User getUser() {
+        return userService.getCurrentUser();
+    }
+    public void addUser(String id, String password) {
+        userService.addUser(id, password);
+    }
+    public boolean checkDuplicatedUserId(String id) {
+        return userService.checkDuplicate(id);
+    }
+    public List<User> getUserList() {
+        return userService.getUserList();
+    }
+    public boolean login(String id, String password) {
+        return userService.login(id, password);
+    }
+    public void logout() {
+        new LoginBoundary(this);
+    }
+
+
+
 }
