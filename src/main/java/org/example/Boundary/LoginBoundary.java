@@ -1,87 +1,88 @@
 package org.example.Boundary;
 
-
 import org.example.Control.MainControl;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 
 public class LoginBoundary extends JFrame {
-    private final MainControl mainControl;
-    private final JTextField idField = new JTextField(10);
-    private final JPasswordField pwField = new JPasswordField(10);
 
-    private final JPanel idPanel = new JPanel(new FlowLayout());//로그인
+    private final MainControl mainControl;
+
+    private final JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 10));
     private final JLabel idLabel = new JLabel("ID: ");
-    private final JPanel pwPanel = new JPanel(new FlowLayout());
+    private final JTextField idField = new JTextField(15);
     private final JLabel pwLabel = new JLabel("PW: ");
+    private final JPasswordField pwField = new JPasswordField(15);
     private final JPanel buttonPanel = new JPanel(new FlowLayout());
-    private final JButton loginButton = new JButton("Login");
-    private final JButton registerButton = new JButton("Register");
+    private final JButton loginButton = new JButton("로그인");
+    private final JButton registerButton = new JButton("회원가입");
 
     public LoginBoundary(MainControl mainControl) {
         this.mainControl = mainControl;
 
         initUI();
+
     }
 
-    public void initUI() {
-        setTitle("Login");
-        setSize(600, 400);
+    private void initUI() {
+        setTitle("로그인");
+        setSize(300, 180);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
 
+        setUpInputPanel();
+        setUpButtonPanel();
+        setVisible(true);
+    }
 
-        idPanel.add(idLabel);
-        idPanel.add(idField);
+    private void setUpInputPanel() {
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
 
-        pwPanel.add(pwLabel);
-        pwPanel.add(pwField);
+        inputPanel.add(idLabel);
+        inputPanel.add(idField);
+        inputPanel.add(pwLabel);
+        inputPanel.add(pwField);
 
+        add(inputPanel, BorderLayout.CENTER);
+    }
+
+    private void setUpButtonPanel() {
+        loginButton.addActionListener(e -> login());
+        registerButton.addActionListener(e -> register());
 
         buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
 
-        pwField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    // Enter 키 누르면 로그인 버튼을 누른 것과 같은 동작 수행
-                    loginButton.doClick();
-                }
-            }
-        });
-
-        loginButton.addActionListener(e -> {
-            String id = idField.getText();
-            String pw = String.valueOf(pwField.getPassword());
-
-            try {
-                if (mainControl.login(id, pw)) {
-                    JOptionPane.showMessageDialog(this, "로그인 성공!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    mainControl.setPortfolioList();
-                    mainControl.showMainBoundary(mainControl.getUser()); // 로그인 성공 후 메인 화면으로 이동
-                    dispose(); // 현재 창 닫기
-                } else {
-                    JOptionPane.showMessageDialog(this, "로그인 실패: 아이디 또는 비밀번호가 올바르지 않습니다.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        });
-
-        registerButton.addActionListener(e -> {
-                dispose(); // 현재 창 닫기
-                mainControl.showRegisterBoundary();
-        });
-
-        add(idPanel, BorderLayout.NORTH);
-        add(pwPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+    }
 
-        setVisible(true);
+    private void login() {
+        String id = idField.getText().trim();
+        String pw = new String(pwField.getPassword()).trim();
+
+        if (id.isEmpty() || pw.isEmpty()) {
+            showMessage("아이디와 비밀번호를 입력하세요.", "입력 오류", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!mainControl.login(id, pw)) {
+            showMessage("아이디 또는 비밀번호가 올바르지 않습니다.", "로그인 실패", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        showMessage("로그인 성공!", "로그인 성공", JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+        mainControl.showMainBoundary();
+    }
+
+    private void register() {
+        dispose();
+        mainControl.showRegisterBoundary();
+    }
+
+    private void showMessage(String message, String title, int messageType) {
+        JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 }

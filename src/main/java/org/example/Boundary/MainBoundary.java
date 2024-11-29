@@ -11,30 +11,34 @@ import java.util.List;
 
 public class MainBoundary extends JFrame {
 
-    private final MainControl mainControl;
     private final JPanel newsPanel = new JPanel(new GridLayout(5, 1, 10, 10)); // 뉴스 버튼 레이아웃
     private final JLabel newsLabel = new JLabel("오늘의 경제 이슈 - " + LocalDate.now(), SwingConstants.CENTER); // 가운데 정렬
     private final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // 버튼 패널
     private final JButton assetButton = new JButton("자산 검색");
     private final JButton portfolioButton = new JButton("포트폴리오 관리");
     private final JButton logoutButton = new JButton("로그아웃");
+
+    private final MainControl mainControl;
+
     public MainBoundary(MainControl mainControl) {
         this.mainControl = mainControl;
 
-        loadNewsList();
-        showButtonPanel();
         initUI();
+        setVisible(true);
+        setUpNewsPanel();
+        setUpButtonPanel();
+        loadNewsList();
     }
 
-    // 초기 UI 설정
     private void initUI() {
-        setTitle(mainControl.getUserId() + "  포트폴리오 매니저");
-        setSize(700, 500); // 크기를 조금 더 키움
+        setTitle(mainControl.getUser().getUsername() + "'s  포트폴리오 매니저");
+        setSize(700, 500);
         setLayout(new BorderLayout(10, 10)); // 간격 추가
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
-
+    private void setUpNewsPanel() {
         // 뉴스 제목 스타일링
         newsLabel.setFont(new Font("Arial", Font.BOLD, 18));
         newsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -42,19 +46,12 @@ public class MainBoundary extends JFrame {
 
         // 뉴스 패널 스타일링
         newsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(new JScrollPane(newsPanel), BorderLayout.CENTER); // 스크롤 추가
-
-        // 버튼 패널 추가
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        setVisible(true);
+        add(newsPanel, BorderLayout.CENTER); // 스크롤 추가
     }
 
     // 뉴스 데이터를 가져오고 화면에 표시
     private void loadNewsList() {
         List<News> newsList = mainControl.fetchNewsHeadlines(0, 5);
-
-        newsPanel.removeAll(); // 기존 컴포넌트 제거
         for (News news : newsList) {
             JButton newsButton = new JButton(news.getTitle());
             newsButton.setFocusPainted(false);
@@ -62,19 +59,13 @@ public class MainBoundary extends JFrame {
             newsButton.addActionListener(e -> openURLInBrowser(news.getLink()));
             newsPanel.add(newsButton);
         }
-
-        revalidate();
-        repaint();
     }
 
     // 버튼 패널 설정
-    private void showButtonPanel() {
+    private void setUpButtonPanel() {
         assetButton.addActionListener(e -> mainControl.showAssetInfoBoundary());
         portfolioButton.addActionListener(e -> mainControl.showPortfolioListBoundary());
-        logoutButton.addActionListener(e -> {
-            dispose();
-            mainControl.logout();
-        });
+        logoutButton.addActionListener(e -> logout());
 
         // 버튼 스타일링
         for (JButton button : new JButton[]{assetButton, portfolioButton, logoutButton}) {
@@ -84,8 +75,12 @@ public class MainBoundary extends JFrame {
             buttonPanel.add(button);
         }
 
-        revalidate();
-        repaint();
+        add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void logout(){
+        dispose();
+        mainControl.logout();
     }
 
     // URL 을 기본 브라우저에서 열기

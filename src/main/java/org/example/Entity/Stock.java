@@ -1,39 +1,51 @@
 package org.example.Entity;
 
-import java.text.DecimalFormat;
-import java.time.Month;
-import java.util.List;
+public class Stock extends Asset implements Tradable {
 
-public class Stock extends TradableAsset implements DividendBearing {
+    private double purchasePrice; // 구매 가격
+    private double currentPrice;  // 현재 가격
 
     public Stock(String symbol, double purchasePrice, double quantity) {
-        super(AssetType.STOCK, symbol, purchasePrice, quantity);
+        super(AssetType.STOCK, symbol, quantity);
+        this.purchasePrice = purchasePrice;
     }
 
     @Override
-    public double getExpectedDividend() {
-        return 0;
+    public double getPurchasePrice() {
+        return purchasePrice;
     }
 
     @Override
-    public List<Month> getExpectedDividendMonth() {
-        return List.of();
+    public void setPurchasePrice(double purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    @Override
+    public double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    @Override
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    @Override
+    public Double getEvaluationPrice() {
+        return currentPrice * getQuantity();
     }
 
     @Override
     public String[] toStringArray() {
-        DecimalFormat decimalFormat = new DecimalFormat("#.00"); // 소수점 둘째 자리로 포맷
-
         return new String[]{
-                getAssetType().toString(),
-                getSymbol(),
-                decimalFormat.format(getEvaluationPrice()),
-                decimalFormat.format(getTotalPurchasePrice()),
-                decimalFormat.format(getProfitLoss()),
-                decimalFormat.format(getProfitLossRate()),
-                decimalFormat.format(getCurrentPrice()),
-                decimalFormat.format(getPurchasePrice()),
-                decimalFormat.format(getQuantity()),
+                getAssetType().name(),                                // 자산 종류
+                getSymbol(),                                          // 종목 코드
+                String.format("%.2f", purchasePrice),                 // 구매 가격
+                String.format("%.2f", currentPrice),                  // 현재 가격
+                String.format("%.2f", getEvaluationPrice()),          // 평가 금액
+                String.format("%.2f", calculateProfitLoss(currentPrice, purchasePrice, getQuantity())), // 손익
+                String.format("%.2f%%", calculateProfitLossRate(currentPrice, purchasePrice)),           // 손익률
+                String.format("%.2f", getQuantity())                  // 보유 수량
         };
     }
 }

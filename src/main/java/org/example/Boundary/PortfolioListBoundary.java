@@ -18,34 +18,43 @@ public class PortfolioListBoundary extends JFrame {
     private final JButton deletePortfolioButton = new JButton("포트폴리오 삭제");
     private final JList<Portfolio> portfolioList = new JList<>();
 
-    public PortfolioListBoundary(MainControl mainControl){
+    public PortfolioListBoundary(MainControl mainControl) {
         this.mainControl = mainControl;
-
-        updatePortfolioList();
         initUI();
+        updatePortfolioList();
     }
 
-    private void initUI(){
+    private void initUI() {
         setTitle("포트폴리오 리스트");
         setSize(600, 400);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        addPortfolioButton.addActionListener(e -> addPortfolio());
-        viewPortfolioButton.addActionListener(e -> viewPortfolio());
-        editPortfolioNameButton.addActionListener(e -> editPortfolioName());
-        deletePortfolioButton.addActionListener(e -> deletePortfolio());
+        // Button Panel 설정
+        setUpButtonPanel();
 
+        // Layout 설정
+        portfolioListLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(portfolioListLabel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.SOUTH);
+        add(new JScrollPane(portfolioList), BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    private void setUpButtonPanel() {
+        buttonPanel.setLayout(new FlowLayout());
         buttonPanel.add(addPortfolioButton);
         buttonPanel.add(viewPortfolioButton);
         buttonPanel.add(editPortfolioNameButton);
         buttonPanel.add(deletePortfolioButton);
 
-        add(portfolioListLabel, BorderLayout.NORTH);
-        add(buttonPanel, BorderLayout.NORTH);
-        add(new JScrollPane(portfolioList), BorderLayout.CENTER);
-
-        setVisible(true);
+        // 버튼 액션 리스너 설정
+        addPortfolioButton.addActionListener(e -> handleAddPortfolio());
+        viewPortfolioButton.addActionListener(e -> handleViewPortfolio());
+        editPortfolioNameButton.addActionListener(e -> handleEditPortfolioName());
+        deletePortfolioButton.addActionListener(e -> handleDeletePortfolio());
     }
 
     // 포트폴리오 목록 업데이트
@@ -57,58 +66,77 @@ public class PortfolioListBoundary extends JFrame {
         portfolioList.setModel(listModel);
     }
 
-    private void addPortfolio(){
-        String name = JOptionPane.showInputDialog(this, "포트폴리오 이름 입력:").trim();
-        if(name.isEmpty()){
-            throw new IllegalArgumentException("올바르지 않은 이름");
+    private void handleAddPortfolio() {
+        String name = JOptionPane.showInputDialog(this, "포트폴리오 이름 입력:");
+        if (name == null || name.trim().isEmpty()) {
+            showError("포트폴리오 이름을 입력하세요.");
+            return;
         }
-        if(mainControl.checkDuplicatedPortfolioName(name)){
-            throw new IllegalArgumentException("중복된 이름");
+        if (mainControl.checkDuplicatedPortfolioName(name)) {
+            showError("중복된 포트폴리오 이름입니다.");
+            return;
         }
-        mainControl.addPortfolio(name);
+        mainControl.addPortfolio(name.trim());
         updatePortfolioList();
+        showMessage("포트폴리오가 추가되었습니다.");
     }
 
-    private void viewPortfolio(){
-        Portfolio portfolio = portfolioList.getSelectedValue();
-        if(portfolio == null){
-            throw new IllegalArgumentException("포트폴리오를 선택해주세요");
+    private void handleViewPortfolio() {
+        Portfolio portfolio = getSelectedPortfolio();
+        if (portfolio == null) {
+            return;
         }
         mainControl.showPortfolioBoundary(portfolio);
     }
 
-    private void editPortfolioName() {
-        Portfolio portfolio = portfolioList.getSelectedValue();
+    private void handleEditPortfolioName() {
+        Portfolio portfolio = getSelectedPortfolio();
         if (portfolio == null) {
-            JOptionPane.showMessageDialog(this, "수정할 포트폴리오를 선택해주세요.", "오류", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String newName = JOptionPane.showInputDialog(this, "새로운 포트폴리오 이름을 입력하세요:", portfolio.getName()).trim();
-        if (newName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "올바르지 않은 이름입니다.", "오류", JOptionPane.ERROR_MESSAGE);
+        String newName = JOptionPane.showInputDialog(this, "새로운 포트폴리오 이름을 입력하세요:", portfolio.getName());
+        if (newName == null || newName.trim().isEmpty()) {
+            showError("올바르지 않은 이름입니다.");
             return;
         }
-
         if (mainControl.checkDuplicatedPortfolioName(newName)) {
-            JOptionPane.showMessageDialog(this, "중복된 이름입니다.", "오류", JOptionPane.ERROR_MESSAGE);
+            showError("중복된 이름입니다.");
             return;
         }
 
-        portfolio.setName(newName); // 포트폴리오 이름 변경
-        updatePortfolioList(); // UI 갱신
-        JOptionPane.showMessageDialog(this, "포트폴리오 이름이 수정되었습니다.", "성공", JOptionPane.INFORMATION_MESSAGE);
+        portfolio.setName(newName.trim());
+        updatePortfolioList();
+        showMessage("포트폴리오 이름이 수정되었습니다.");
     }
 
-    private void deletePortfolio(){
-        Portfolio portfolio = portfolioList.getSelectedValue();
-        if(portfolio == null){
-            throw new IllegalArgumentException("삭제할 포트폴리오를 선택해주세요");
+    private void handleDeletePortfolio() {
+        Portfolio portfolio = getSelectedPortfolio();
+        if (portfolio == null) {
+            return;
         }
+
         int confirm = JOptionPane.showConfirmDialog(this, "정말로 삭제하시겠습니까?", "포트폴리오 삭제", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             mainControl.deletePortfolio(portfolio);
             updatePortfolioList();
+            showMessage("포트폴리오가 삭제되었습니다.");
         }
+    }
+
+    private Portfolio getSelectedPortfolio() {
+        Portfolio portfolio = portfolioList.getSelectedValue();
+        if (portfolio == null) {
+            showError("포트폴리오를 선택하세요.");
+        }
+        return portfolio;
+    }
+
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "알림", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "오류", JOptionPane.ERROR_MESSAGE);
     }
 }

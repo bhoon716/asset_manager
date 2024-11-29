@@ -1,150 +1,195 @@
 package org.example.Control;
 
-import org.example.ApplicationLogic.*;
+import org.example.ApplicationLogic.AssetApiServiceFactory;
+import org.example.ApplicationLogic.NewsApiService;
+import org.example.ApplicationLogic.PortfolioService;
+import org.example.ApplicationLogic.UserService;
 import org.example.Boundary.*;
 import org.example.Entity.*;
+import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Map;
 
 public class MainControl {
 
-    private final AssetFactory assetFactory;
+    private final AssetApiServiceFactory assetApiServiceFactory;
+    private final PortfolioService portfolioService;
     private final NewsApiService newsApiService;
-    private final PortfolioServiceImpl portfolioService;
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public MainControl(AssetFactory assetFactory, NewsApiService newsApiService, PortfolioServiceImpl portfolioService, UserServiceImpl userService){
-        this.assetFactory = assetFactory;
-        this.newsApiService = newsApiService;
+    public MainControl(
+            AssetApiServiceFactory assetApiServiceFactory,
+            PortfolioService portfolioService,
+            NewsApiService newsApiService,
+            UserService userService
+    ) {
+        this.assetApiServiceFactory = assetApiServiceFactory;
         this.portfolioService = portfolioService;
+        this.newsApiService = newsApiService;
         this.userService = userService;
     }
 
-    public void showMainBoundary(User user){
-        userService.setCurrentUser(user);
-        new MainBoundary(this);
+    // User Initialization and Portfolio Setup
+    public void initializeUserPortfolio() {
+        portfolioService.setPortfolioList(userService.getCurrentUser().getPortfolioList());
     }
 
-    public void showAssetInfoBoundary(){
-        new AssetInfoBoundary(this);
+    // Boundary Display Methods
+    public void showMainBoundary() {
+        initializeUserPortfolio();
+        new MainBoundary(this);
     }
 
     public void showPortfolioListBoundary() {
         new PortfolioListBoundary(this);
     }
+
     public void showPortfolioBoundary(Portfolio portfolio) {
         portfolioService.setCurrentPortfolio(portfolio);
         new PortfolioBoundary(this);
     }
+
     public void showLoginBoundary() {
         new LoginBoundary(this);
     }
+
     public void showRegisterBoundary() {
         new RegisterBoundary(this);
     }
 
-
-
-    public AssetDetail searchAsset(AssetType type, String symbol) {
-        AssetApiService apiService = assetFactory.getApiService(type);
-        return null;
+    public void showAddAssetDialog() {
+        AssetDialog assetDialog = new AssetDialog(null, this, "자산 추가");
+        assetDialog.setVisible(true);
     }
 
-    public List<News> fetchNewsHeadlines(int page, int size) {
-        return newsApiService.getNewsList(page, size);
+    public void showEditAssetDialog(int selectedRow) {
+        AssetDialog assetDialog = new AssetDialog(null, this, "자산 수정");
+        assetDialog.setEditMode(selectedRow);
+        assetDialog.setVisible(true);
     }
 
+    public void showAssetInfoBoundary() {
+        new AssetSearchBoundary(this);
+    }
 
+    // Portfolio Operations
     public List<Portfolio> getPortfolioList() {
         return portfolioService.getPortfolioList();
     }
-    public List<Portfolio> getPortfolioListDataList() {
-        return userService.getPortfolioListDataList();
+
+    public void addPortfolio(String name) {
+        portfolioService.addPortfolio(name);
+    }
+
+    public void deletePortfolio(Portfolio portfolio) {
+        portfolioService.deletePortfolio(portfolio);
     }
 
     public boolean checkDuplicatedPortfolioName(String name) {
         return portfolioService.checkDuplicate(name);
     }
 
-    public void addPortfolio(String name) {
-        portfolioService.addPortfolio(name);
-    }
-    public void setPortfolioList() {
-        portfolioService.setPortfolioList(userService.getPortfolioListDataList());
-    }
-
-
-    public void deletePortfolio(Portfolio portfolio) {
-        portfolioService.deletePortfolio(portfolio);
+    public double getCurrentPortfolioEvaluationPrice() {
+        Portfolio currentPortfolio = portfolioService.getCurrentPortfolio();
+        if (currentPortfolio == null) {
+            throw new IllegalStateException("현재 선택된 포트폴리오가 없습니다.");
+        }
+        return currentPortfolio.getTotalEvaluationPrice();
     }
 
-    public Portfolio getCurrentPortfolio() {
-        return portfolioService.getCurrentPortfolio();
+    public double getCurrentPortfolioProfitLoss() {
+        Portfolio currentPortfolio = portfolioService.getCurrentPortfolio();
+        if (currentPortfolio == null) {
+            throw new IllegalStateException("현재 선택된 포트폴리오가 없습니다.");
+        }
+        return currentPortfolio.getTotalProfitLoss();
     }
 
-    public void addAsset(Asset newAsset) {
-        portfolioService.addAsset(newAsset);
+    public double getCurrentPortfolioProfitLossRate() {
+        Portfolio currentPortfolio = portfolioService.getCurrentPortfolio();
+        if (currentPortfolio == null) {
+            throw new IllegalStateException("현재 선택된 포트폴리오가 없습니다.");
+        }
+        return currentPortfolio.getTotalProfitLossRate();
     }
 
-    public void changeAsset(int selectedRow, Asset newAsset) {
-        portfolioService.changeAsset(selectedRow, newAsset);
+    public Object[][] getAssetTableData() {
+        return portfolioService.getPortfolioDataList().toArray(new Object[0][]);
+    }
+
+    // Asset Operations
+    public void addAsset(AssetType assetType, String symbol, double purchasePrice, double quantity) {
+        portfolioService.addAsset(assetType, symbol, purchasePrice, quantity);
+        fetchAssetPriceAndUpdate(symbol, assetType);
+    }
+
+    public void editAsset(int selectedRow, AssetType assetType, String symbol, double purchasePrice, double quantity) {
+        portfolioService.editAsset(selectedRow, assetType, symbol, purchasePrice, quantity);
     }
 
     public void deleteAsset(int selectedRow) {
         portfolioService.deleteAsset(selectedRow);
     }
 
-    public List<Object[]> getPortfolioDataList() {
-        return portfolioService.getPortfolioDataList();
-    }
-
-    public Asset getDuplicatedAsset(AssetType assetType, String symbol){
-        return portfolioService.getDuplicatedAsset( assetType,  symbol);
-    }
-
-    public void addAsset(AssetType assetType, String symbol, Double purchasePrice, Double quantity) {
-        Asset asset = assetFactory.createAsset(assetType, symbol, purchasePrice, quantity);
-        if(asset instanceof TradableAsset){
-            double currentPrice = assetFactory.getApiService(assetType).getCurrentPrice(symbol);
-            ((TradableAsset) asset).setCurrentPrice(currentPrice);
-        }
-        portfolioService.addAsset(asset);
-    }
-
     public Asset getAssetByIndex(int index) {
-        return portfolioService.getCurrentPortfolio().getAssetList().get(index);
+        Portfolio currentPortfolio = portfolioService.getCurrentPortfolio();
+        if (currentPortfolio == null) {
+            throw new IllegalStateException("현재 선택된 포트폴리오가 없습니다.");
+        }
+        return currentPortfolio.getAssetList().get(index);
     }
 
-    public void fetchAllCurrentPrice(){
-        for(Asset asset : portfolioService.getCurrentPortfolio().getAssetList()){
-            if(asset instanceof TradableAsset){
-                double currentPrice = assetFactory.getApiService(asset.getAssetType()).getCurrentPrice(asset.getSymbol());
-                ((TradableAsset) asset).setCurrentPrice(currentPrice);
-            }
+    public void fetchAllCurrentPrice() {
+        Portfolio currentPortfolio = portfolioService.getCurrentPortfolio();
+        if (currentPortfolio == null) {
+            throw new IllegalStateException("현재 선택된 포트폴리오가 없습니다.");
         }
+        currentPortfolio.getAssetList().stream()
+                .filter(asset -> asset instanceof Tradable)
+                .forEach(asset -> fetchAssetPriceAndUpdate(asset.getSymbol(), asset.getAssetType()));
+    }
+
+    private void fetchAssetPriceAndUpdate(String symbol, AssetType assetType) {
+        try {
+            double currentPrice = assetApiServiceFactory.getApiService(assetType).getCurrentPrice(symbol);
+            Asset asset = portfolioService.getDuplicatedAsset(assetType, symbol);
+            if (asset instanceof Tradable tradable) {
+                tradable.setCurrentPrice(currentPrice);
+            }
+        } catch (Exception e) {
+            System.err.println("현재 가격 업데이트 실패: " + e.getMessage());
+        }
+    }
+
+    // Asset Search
+    public JSONObject searchAsset(AssetType type, String symbol) {
+        return assetApiServiceFactory.getApiService(type).getAssetInfo(symbol);
+    }
+
+    // News Operations
+    public List<News> fetchNewsHeadlines(int page, int size) {
+        return newsApiService.getNewsList(page, size);
+    }
+
+    // User Operations
+    public boolean login(String id, String password) {
+        return userService.login(id, password);
+    }
+
+    public void addUser(String id, String password) {
+        userService.addUser(id, password);
+    }
+
+    public boolean checkDuplicatedUserId(String id) {
+        return userService.checkDuplicate(id);
     }
 
     public User getUser() {
         return userService.getCurrentUser();
     }
-    public String getUserId() {return userService.getUserId();}
-    public void addUser(String id, String password) {
-        userService.addUser(id, password);
-    }
-    public boolean checkDuplicatedUserId(String id) {
-        return userService.checkDuplicate(id);
-    }
-    public Map<String,User> getUserMap() {
-        return userService.getUserMap();
-    }
-    public boolean login(String id, String password) {
-        return userService.login(id, password);
-    }
+
     public void logout() {
-        new LoginBoundary(this);
+        userService.setCurrentUser(null);
+        showLoginBoundary();
     }
-
-
-
 }

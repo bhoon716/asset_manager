@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Optional;
 
 public class CryptoApiService implements AssetApiService {
 
@@ -15,35 +16,44 @@ public class CryptoApiService implements AssetApiService {
 
     @Override
     public double getCurrentPrice(String symbol) {
-        String url = getBaseUrl(symbol);
+        return fetchFromApi(symbol)
+                .map(jsonObject -> jsonObject.optDouble("price", Double.NaN))
+                .orElseThrow(() -> new IllegalArgumentException("Symbol not found or invalid response: " + symbol));
+    }
 
+    @Override
+    public JSONObject getAssetInfo(String symbol) {
+        return fetchFromApi(symbol)
+                .orElseThrow(() -> new IllegalArgumentException("No data found for symbol: " + symbol));
+    }
+
+
+    private Optional<JSONObject> fetchFromApi(String symbol) {
         try {
-            // HTTP GET 요청
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setRequestMethod("GET");
+            String url = getBaseUrl(symbol);
+            JSONArray jsonArray = fetchJsonArrayFromApi(url);
+            if (!jsonArray.isEmpty()) {
+                return Optional.of(jsonArray.getJSONObject(0));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
 
-            // 응답 읽기
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    private JSONArray fetchJsonArrayFromApi(String url) throws Exception {
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod("GET");
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             StringBuilder response = new StringBuilder();
             String line;
 
             while ((line = reader.readLine()) != null) {
                 response.append(line);
             }
-            reader.close();
 
-            // JSON 파싱
-            JSONArray jsonArray = new JSONArray(response.toString());
-            if (jsonArray.length() > 0) {
-                JSONObject cryptoData = jsonArray.getJSONObject(0);
-                return cryptoData.getDouble("price"); // 암호화폐 가격 반환
-            }
-
-            throw new IllegalArgumentException("Symbol not found or invalid response: " + symbol);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to fetch current price for symbol: " + symbol);
+            return new JSONArray(response.toString());
         }
     }
 
