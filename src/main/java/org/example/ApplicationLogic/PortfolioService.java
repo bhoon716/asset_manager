@@ -8,26 +8,27 @@ import java.util.List;
 
 public interface PortfolioService {
 
-    List<Portfolio> getPortfolioList();
+    List<Portfolio> getPortfolioList(); // 모든 포트폴리오 반환
 
-    boolean checkDuplicate(String name);
+    boolean checkDuplicate(String name); // 이름 중복 확인
 
-    void setPortfolioList(List<Portfolio> portfolioList);
-    void addPortfolio(String name);
+    void setPortfolioList(List<Portfolio> portfolioList); // 포트폴리오 리스트 설정
 
-    void deletePortfolio(Portfolio portfolio);
+    void addPortfolio(String name); // 포트폴리오 추가
 
-    Portfolio getCurrentPortfolio();
+    void deletePortfolio(Portfolio portfolio); // 포트폴리오 삭제
 
-    void setCurrentPortfolio(Portfolio currentPortfolio);
+    Portfolio getCurrentPortfolio(); // 현재 포트폴리오 반환
 
-    void addAsset(Asset newAsset);
+    void setCurrentPortfolio(Portfolio currentPortfolio); // 현재 포트폴리오 설정
 
-    void changeAsset(int index, Asset newAsset);
+    void addAsset(AssetType assetType, String symbol, double purchasePrice, double quantity); // 자산 추가
 
-    void deleteAsset(int selectedRow);
+    void deleteAsset(int selectedRow); // 자산 삭제
 
-    List<Object[]> getPortfolioDataList();
+    List<Object[]> getPortfolioDataList(); // 포트폴리오 데이터 반환
 
-    Asset getDuplicatedAsset(AssetType assetType, String symbol);
+    Asset getDuplicatedAsset(AssetType assetType, String symbol); // 중복 자산 조회
+
+    void editAsset(int selectedRow, AssetType assetType, String symbol, double purchasePrice, double quantity); // 자산 수정
 }

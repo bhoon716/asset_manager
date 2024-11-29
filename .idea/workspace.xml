@@ -4,13 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="70d87370-edf2-4d59-82a7-b0426d97a7f5" name="Changes" comment="feat:&#10;메인 화면 뉴스 기능 완료&#10;자산 검색 기능 완료">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/NewsApiServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/PortfolioServiceImpl.java" afterDir="false" />
+    <list default="true" id="70d87370-edf2-4d59-82a7-b0426d97a7f5" name="Changes" comment="refactor: DIP">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/AssetApiServiceFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Boundary/AssetDialog.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Boundary/AssetSearchBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/NewsApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/NewsApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/AssetApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/AssetApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/AssetFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/AssetFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/CryptoApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/CryptoApiService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/PortfolioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/PortfolioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/PortfolioServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/PortfolioServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/StockApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/StockApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ApplicationLogic/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Boundary/AssetInfoBoundary.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Boundary/LoginBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Boundary/LoginBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Boundary/MainBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Boundary/MainBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Boundary/PortfolioBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Boundary/PortfolioBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Boundary/PortfolioListBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Boundary/PortfolioListBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Boundary/RegisterBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Boundary/RegisterBoundary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Control/MainControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Control/MainControl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/Asset.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity/Asset.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/AssetDetail.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/Cash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity/Cash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/Crypto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity/Crypto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/DividendBearing.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity/Portfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/Stock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity/Stock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/TradableAsset.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity/Tradable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,14 +70,26 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "bhoon716"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/bhoon716/asset_manager.git",
+    "accountId": "0e2c90d3-8fa4-4dff-a11d-736f1a2b9179"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -64,25 +99,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Building Gradle Dependencies.executor": "Run",
-    "Gradle.asset_manager [:org.example.ApplicationLogic.NewsApiService.main()].executor": "Run",
-    "Gradle.asset_manager [:org.example.Main.main()].executor": "Run",
-    "Gradle.asset_manager [dependencies].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/bhoon/Desktop/asset_manager/src/main/java/org/example",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Building Gradle Dependencies.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.asset_manager [:org.example.ApplicationLogic.NewsApiService.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.asset_manager [:org.example.Main.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.asset_manager [dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;bhoon&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/bhoon/Desktop/asset_manager/src/main/java/org/example&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.example.Control" />
@@ -183,6 +218,7 @@
       <workItem from="1732287680703" duration="22833000" />
       <workItem from="1732436966370" duration="13642000" />
       <workItem from="1732608875624" duration="53000" />
+      <workItem from="1732761999264" duration="28030000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <option name="closed" value="true" />
@@ -210,5 +246,9 @@
     <MESSAGE value="first commit" />
     <MESSAGE value="feat:&#10;메인 화면 뉴스 기능 완료&#10;자산 검색 기능 완료" />
     <option name="LAST_COMMIT_MESSAGE" value="feat:&#10;메인 화면 뉴스 기능 완료&#10;자산 검색 기능 완료" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

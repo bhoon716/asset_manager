@@ -4,18 +4,10 @@ import org.example.Entity.*;
 
 public class AssetFactory {
 
-    public AssetApiService getApiService(AssetType assetType) {
-        return switch (assetType) {
-            case STOCK -> new StockApiService();
-            case CRYPTO -> new CryptoApiService();
-            default -> {
-                System.out.println("지원되지");
-                throw new IllegalArgumentException("지원되지 않는 자산 종류");
-            }
-        };
-    }
-
-    public Asset createAsset(AssetType assetType, String symbol, Double purchasePrice, Double quantity) {
+    /**
+     * AssetType 에 따라 적절한 Asset 객체를 생성합니다.
+     */
+    public Asset createAsset(AssetType assetType, String symbol, double purchasePrice, double quantity) {
         switch (assetType) {
             case STOCK:
                 return new Stock(symbol, purchasePrice, quantity);
@@ -24,8 +16,7 @@ public class AssetFactory {
             case CASH:
                 return new Cash(symbol, quantity);
             default:
-                System.out.println("지원되지1");
-                throw new IllegalArgumentException("지원되지 않는 자산 종류");
+                throw new IllegalArgumentException("지원되지 않는 자산 타입: " + assetType);
         }
     }
 }
