@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void setCurrentUser(User currentUser) {
-        if (currentUser == null) {
+        if (this.currentUser == null) {
             throw new IllegalArgumentException("유효하지 않은 사용자입니다.");
         }
         this.currentUser = currentUser;
