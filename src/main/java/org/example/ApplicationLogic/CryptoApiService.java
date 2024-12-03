@@ -18,13 +18,13 @@ public class CryptoApiService implements AssetApiService {
     public double getCurrentPrice(String symbol) {
         return fetchFromApi(symbol)
                 .map(jsonObject -> jsonObject.optDouble("price", Double.NaN))
-                .orElseThrow(() -> new IllegalArgumentException("Symbol not found or invalid response: " + symbol));
+                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 코드: " + symbol));
     }
 
     @Override
     public JSONObject getAssetInfo(String symbol) {
         return fetchFromApi(symbol)
-                .orElseThrow(() -> new IllegalArgumentException("No data found for symbol: " + symbol));
+                .orElseThrow(() -> new IllegalArgumentException("찾을 수 없는 코드: " + symbol));
     }
 
 
