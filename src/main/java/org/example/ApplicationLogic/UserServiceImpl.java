@@ -23,9 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(String id, String password) {
-        if (checkDuplicate(id)) {
-            throw new IllegalArgumentException("이미 존재하는 사용자 ID 입니다: " + id);
-        }
         userMap.put(id, new User(id, password));
     }
 

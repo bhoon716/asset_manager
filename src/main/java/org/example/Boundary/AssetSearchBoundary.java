@@ -88,7 +88,7 @@ public class AssetSearchBoundary extends JFrame {
             // 검색 결과 가져오기
             JSONObject assetInfo = mainControl.searchAsset(assetType, symbol);
             assetInfoTextArea.setText(formatAssetInfo(assetInfo)); // JSON 데이터를 보기 좋게 포맷팅
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             // 예외 발생 시 사용자에게 경고 메시지 출력
             JOptionPane.showMessageDialog(this, ex.getMessage(), "검색 오류", JOptionPane.ERROR_MESSAGE);
             assetInfoTextArea.setText(""); // 텍스트 초기화
