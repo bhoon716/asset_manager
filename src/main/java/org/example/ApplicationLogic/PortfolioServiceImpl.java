@@ -39,18 +39,12 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public void addPortfolio(String name) {
-        if (checkDuplicate(name)) {
-            throw new IllegalArgumentException("이미 존재하는 포트폴리오 이름입니다.");
-        }
         portfolioList.add(new Portfolio(name));
     }
 
     @Override
     public void deletePortfolio(Portfolio portfolio) {
         portfolioList.remove(portfolio);
-        if (portfolio.equals(currentPortfolio)) {
-            currentPortfolio = null;
-        }
     }
 
     @Override
@@ -60,9 +54,6 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Override
     public void setCurrentPortfolio(Portfolio currentPortfolio) {
-        if (currentPortfolio == null || !portfolioList.contains(currentPortfolio)) {
-            throw new IllegalArgumentException("선택한 포트폴리오가 목록에 없습니다.");
-        }
         this.currentPortfolio = currentPortfolio;
     }
 
@@ -74,10 +65,13 @@ public class PortfolioServiceImpl implements PortfolioService {
             updateExistingAsset(existingAsset, purchasePrice, quantity);
         } else {
             Asset asset = assetFactory.createAsset(assetType, symbol, purchasePrice, quantity);
-            currentPortfolio.getAssetList().add(asset);
+            addAsset(asset);
         }
     }
 
+    public void addAsset(Asset asset) {
+        currentPortfolio.getAssetList().add(asset);
+    }
     private void updateExistingAsset(Asset existingAsset, double purchasePrice, double quantity) {
         if (existingAsset instanceof Tradable tradable) {
             double totalPurchasePrice = tradable.getPurchasePrice() * existingAsset.getQuantity() + purchasePrice * quantity;
@@ -90,7 +84,7 @@ public class PortfolioServiceImpl implements PortfolioService {
     @Override
     public void deleteAsset(int selectedRow) {
         validateAssetIndex(selectedRow);
-        currentPortfolio.getAssetList().remove(selectedRow);
+        currentPortfolio.removeAsset(selectedRow);
     }
 
     @Override
@@ -116,10 +110,8 @@ public class PortfolioServiceImpl implements PortfolioService {
     public void editAsset(int index, AssetType assetType, String symbol, double purchasePrice, double quantity) {
         validateAssetIndex(index);
 
-        Asset asset = currentPortfolio.getAssetList().get(index);
-        asset.setAssetType(assetType);
-        asset.setSymbol(symbol);
-        asset.setQuantity(quantity);
+        Asset asset = currentPortfolio.getAsset(index);
+        asset.setProperties(assetType, symbol, quantity);
 
         if (asset instanceof Tradable tradable) {
             tradable.setPurchasePrice(purchasePrice);

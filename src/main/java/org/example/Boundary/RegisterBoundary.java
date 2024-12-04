@@ -73,7 +73,7 @@ public class RegisterBoundary extends JFrame {
         }
 
         mainControl.addUser(id, pw);
-        JOptionPane.showMessageDialog(this, "회원가입 성공!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        showMessage("회원가입 성공!", "Success", JOptionPane.INFORMATION_MESSAGE);
         dispose();
         mainControl.showLoginBoundary(); // 회원가입 후 로그인 창으로 이동
     }
@@ -85,5 +85,8 @@ public class RegisterBoundary extends JFrame {
 
     private void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "오류", JOptionPane.ERROR_MESSAGE);
+    }
+    private void showMessage(String message, String title, int messageType) {
+        JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 }
