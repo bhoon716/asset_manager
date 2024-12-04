@@ -105,9 +105,9 @@ public class PortfolioListBoundary extends JFrame {
             return;
         }
 
+        showMessage("포트폴리오 이름이 수정되었습니다.");
         portfolio.setName(newName.trim());
         updatePortfolioList();
-        showMessage("포트폴리오 이름이 수정되었습니다.");
     }
 
     private void handleDeletePortfolio() {

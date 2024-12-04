@@ -7,6 +7,10 @@ public abstract class Asset {
     private double quantity;       // 보유수량
 
     public Asset(AssetType assetType, String symbol, double quantity) {
+        setProperties(assetType, symbol, quantity);
+    }
+
+    public void setProperties(AssetType assetType, String symbol, double quantity) {
         this.assetType = assetType;
         this.symbol = symbol;
         this.quantity = quantity;

@@ -12,6 +12,10 @@ public class Portfolio {
         setName(name);
         this.assetList = new ArrayList<>();
     }
+    public Asset getAsset(int index) {return assetList.get(index);}
+    public void removeAsset(int selectedRow) {
+        assetList.remove(selectedRow);
+    }
 
     public String getName() {
         return name;
