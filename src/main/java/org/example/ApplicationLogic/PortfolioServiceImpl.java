@@ -65,13 +65,10 @@ public class PortfolioServiceImpl implements PortfolioService {
             updateExistingAsset(existingAsset, purchasePrice, quantity);
         } else {
             Asset asset = assetFactory.createAsset(assetType, symbol, purchasePrice, quantity);
-            addAsset(asset);
+            currentPortfolio.addAsset(asset);
         }
     }
 
-    public void addAsset(Asset asset) {
-        currentPortfolio.getAssetList().add(asset);
-    }
     private void updateExistingAsset(Asset existingAsset, double purchasePrice, double quantity) {
         if (existingAsset instanceof Tradable tradable) {
             double totalPurchasePrice = tradable.getPurchasePrice() * existingAsset.getQuantity() + purchasePrice * quantity;

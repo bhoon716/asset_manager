@@ -79,6 +79,14 @@ public class Portfolio {
         return (getTotalProfitLoss() / totalInvestment) * 100;
     }
 
+
+    /**
+     * Add Asset
+     */
+    public void addAsset(Asset asset) {
+        assetList.add(asset);
+    }
+
     @Override
     public String toString() {
         return name;
