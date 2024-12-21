@@ -63,8 +63,8 @@ public class MainBoundary extends JFrame {
 
     // 버튼 패널 설정
     private void setUpButtonPanel() {
-        assetButton.addActionListener(e -> mainControl.showAssetInfoBoundary());
-        portfolioButton.addActionListener(e -> mainControl.showPortfolioListBoundary());
+        assetButton.addActionListener(e -> showAssetInfoBoundary());
+        portfolioButton.addActionListener(e -> showPortfolioListBoundary());
         logoutButton.addActionListener(e -> logout());
 
         // 버튼 스타일링
@@ -76,6 +76,14 @@ public class MainBoundary extends JFrame {
         }
 
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void showAssetInfoBoundary(){
+        mainControl.showAssetInfoBoundary();
+    }
+
+    private void showPortfolioListBoundary(){
+        mainControl.showPortfolioListBoundary();
     }
 
     private void logout(){
